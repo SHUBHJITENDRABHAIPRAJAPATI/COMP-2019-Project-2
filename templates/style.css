@@ -1,0 +1,9 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+header h1 { margin: 0 0 10px 0; }
+a { color: #1e90ff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+div.listing { border:1px solid #ccc; padding:8px; margin:8px 0; }
+button { padding:6px 10px; }
