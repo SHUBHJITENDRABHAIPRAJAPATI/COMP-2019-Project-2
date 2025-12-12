@@ -2,53 +2,57 @@
 include "db-conn.php";
 include "templates/header.php";
 
-// only allow POST (simple check)
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//getting POST data and validating
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     echo "<p>Invalid access. <a href='index.php'>Back to Home</a></p>";
     include "templates/footer.php";
     exit;
 }
 
-// read posted values (basic)
-$place_id = isset($_POST['place_id']) ? $_POST['place_id'] : '';
-$checkin  = isset($_POST['checkin']) ? $_POST['checkin'] : '';
-$checkout = isset($_POST['checkout']) ? $_POST['checkout'] : '';
-$rooms    = isset($_POST['rooms']) ? $_POST['rooms'] : '1';
-$guests   = isset($_POST['guests']) ? $_POST['guests'] : '1';
+//read data from POST request(place_id, checkin, checkout, rooms, guests)
+$place_id = $_POST['place_id'];
+$checkin  = $_POST['checkin'];
+$checkout = $_POST['checkout'];
+$rooms    = $_POST['rooms'];
+$guests   = $_POST['guests'];
 
-// simple required check
-if ($place_id == '' || $checkin == '' || $checkout == '') {
+//information chekkk as usall
+if ($place_id == "" || $checkin == "" || $checkout == "") {
     echo "<p style='color:red'>Missing booking information.</p>";
     echo "<p><a href='index.php'>Back to Home</a></p>";
     include "templates/footer.php";
     exit;
 }
 
-// fetch place and owner (basic prepared query)
-$sql = "SELECT p.*, u.first_name AS owner_first, u.last_name AS owner_last, u.email AS owner_email 
-     FROM places p JOIN users u ON u.id = p.user_id WHERE p.id = :id LIMIT 1";
+//  query to get place and owner info
+$sql = "SELECT p.*, u.first_name AS owner_first, u.last_name AS owner_last, u.email AS owner_email
+        FROM places p JOIN users u ON u.id = p.user_id
+        WHERE p.id = :id LIMIT 1";
 $st = $pdo->prepare($sql);
 $st->execute(array('id' => $place_id));
 $place = $st->fetch();
 
-// if not found show error and back to home
+// if not found
 if (!$place) {
     echo "<p>Place not found. <a href='index.php'>Back to Home</a></p>";
     include "templates/footer.php";
     exit;
 }
 
-// compute nights simply using strtotime (basic arithmetic)
-$ts1 = strtotime($checkin);
-$ts2 = strtotime($checkout);
+// cal number of nights 
+$start = date_create($checkin);
+$end = date_create($checkout);
+
 $nights = 0;
 
-if ($ts1 && $ts2 && $ts2 > $ts1) {
-    $nights = ($ts2 - $ts1) / 86400;
-    $nights = (int)$nights;
+if ($start && $end) 
+
+{
+    $difference = date_diff($start, $end);
+    $nights = $difference->format('%a'); // total days count
 }
 
-// display booking info here from $place and posted data and computed nights
+// output booking summary
 echo "<h2>" . $place['name'] . "</h2>";
 echo "<p>" . $place['description'] . "</p>";
 echo "<p>Owner: <a href='user.php?id=" . $place['user_id'] . "'>" . $place['owner_first'] . " " . $place['owner_last'] . "</a></p>";
@@ -59,7 +63,7 @@ echo "<p>Number of nights: " . $nights . "</p>";
 echo "<p>Rooms requested: " . $rooms . "</p>";
 echo "<p>Guests: " . $guests . "</p>";
 
-// confirm & back buttons for booking
+//shwing ckn,ckout,rooms,guests in confirm and back to home button
 echo "<form method='post' action='confirm.php' style='display:inline;'>";
 echo "<input type='hidden' name='place_id' value='" . $place_id . "'>";
 echo "<input type='hidden' name='checkin' value='" . $checkin . "'>";

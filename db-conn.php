@@ -1,5 +1,5 @@
 <?php
-//Shubh Prajapati's DB connection File
+//Shubh Prajapati's DB connection 
 // database connection 
 $host = "localhost";
 $user = "root";
@@ -12,7 +12,10 @@ $dns="mysql:host=$host;dbname=$db;";
 try {
     // creating a new PDO instance
     $pdo = new PDO($dns, $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "Connected to database";
+    
+
 } catch (PDOException $error) {
     // handle connection errors
     echo(" connection failed: " . $error->getMessage());

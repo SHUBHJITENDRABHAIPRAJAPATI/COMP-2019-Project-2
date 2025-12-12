@@ -1,4 +1,5 @@
 <?php
+//adding db connection and header
 include "db-conn.php";
 include "templates/header.php";
 
@@ -33,6 +34,6 @@ $states = $stmt->fetchAll();
   <button type="submit">Search</button>
 </form>
 
-<p><strong>Note:</strong> Check-in cannot be earlier than today. Check-out must be after check-in.</p>
+<p><strong>Note:</strong>Please,makesure checking date must be today or later, and check-out date must be after check-in date.</p>
 
 <?php include "templates/footer.php"; ?>
