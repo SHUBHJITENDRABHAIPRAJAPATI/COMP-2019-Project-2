@@ -4,9 +4,9 @@ include "templates/header.php";
 
 //read and validateee GET parameters
 
-$state_id = $_GET['state_id'];
-$checkin  = $_GET['checkin'];
-$checkout = $_GET['checkout'];
+$state_id = $_GET["state_id"];
+$checkin  = $_GET["checkin"];
+$checkout = $_GET["checkout"];
 
 $errors = array();//array to hold validation errors
 
@@ -101,11 +101,11 @@ echo "</form>";
 echo "<hr>";
 //process POST request for city, rooms, guests (p,r,g)
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {// POST check as  well as validation
+if ($_SERVER["REQUEST_METHOD"] == "POST") {// POST check as  well as validation
 
-    $city_id = $_POST['city_id'];
-    $rooms = $_POST['rooms'];
-    $guests = $_POST['guests'];
+    $city_id = $_POST["city_id"];
+    $rooms = $_POST["rooms"];
+    $guests = $_POST["guests"];
 
     if ($rooms < 1) {
         $rooms = 1;
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {// POST check as  well as validation
               ORDER BY p.name";
 
         $st = $pdo->prepare($q);
-        $st->execute(['cid' => $city_id, 'r' => $rooms, 'g' => $guests]);
+        $st->execute(["cid" => $city_id, "r" => $rooms, "g" => $guests]);
         $places = $st->fetchAll();
     }
 
@@ -142,13 +142,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {// POST check as  well as validation
         foreach ($places as $p) {
             echo "<div class='listing'>";
 
-            echo "<strong>" . $p['name'] . "</strong><br>";
-            echo $p['description'] . "<br>";
+            echo "<strong>" . $p["name"] . "</strong><br>";
+            echo $p["description"] . "<br>";
 
-            echo "Rooms: " . $p['number_rooms'] . " | ";
-            echo "Guests: " . $p['max_guest'] . " | ";
-            echo "Price/Night: " . $p['price_by_night'] . "<br>";
-            echo "Owner: " . $p['owner_first'] . " " . $p['owner_last'] . "<br><br>";
+            echo "Rooms: " . $p["number_rooms"] . " | ";
+            echo "Guests: " . $p["max_guest"] . " | ";
+            echo "Price/Night: " . $p["price_by_night"] . "<br>";
+            echo "Owner: " . $p["owner_first"] . " " . $p["owner_last"] . "<br><br>";
 
 
 
@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {// POST check as  well as validation
             
             echo "<form method='post' action='book.php'>";
             
-            echo "<input type='hidden' name='place_id' value='" . $p['id'] . "'>";//place id->for booking
+            echo "<input type='hidden' name='place_id' value='" . $p["id"] . "'>";//place id->for booking
             echo "<input type='hidden' name='checkin' value='" . $checkin . "'>";//checkin-> for cheking date
             echo "<input type='hidden' name='checkout' value='" . $checkout . "'>";//checkout: for checkout date
             echo "<input type='hidden' name='rooms' value='" . $rooms . "'>";//rooms

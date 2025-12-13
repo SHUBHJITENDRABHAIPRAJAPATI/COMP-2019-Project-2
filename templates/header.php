@@ -7,7 +7,7 @@
 </head>
 <body>
   <header>
-    <h1>Shubh Booking System</h1>
+    <h1>Shubh's Booking</h1>
     <p><a href="index.php">Home</a></p>
     <hr>
   </header>

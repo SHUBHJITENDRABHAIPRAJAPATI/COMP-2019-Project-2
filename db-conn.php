@@ -1,6 +1,7 @@
 <?php
 //Shubh Prajapati's DB connection 
-// database connection 
+// database connection
+//db connection used same as project-1 
 $host = "localhost";
 $user = "root";
 $pass = "";

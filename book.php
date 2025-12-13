@@ -1,28 +1,28 @@
 <?php
+
+//inluding db connection and header
 include "db-conn.php";
 include "templates/header.php";
-
-//getting POST data and validating
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+//making sure req method is POST
+if ($_SERVER["REQUEST_METHOD"] != "POST") 
+{
     echo "<p>Invalid access. <a href='index.php'>Back to Home</a></p>";
+
     include "templates/footer.php";
+
     exit;
 }
+
 
 //read data from POST request(place_id, checkin, checkout, rooms, guests)
-$place_id = $_POST['place_id'];
-$checkin  = $_POST['checkin'];
-$checkout = $_POST['checkout'];
-$rooms    = $_POST['rooms'];
-$guests   = $_POST['guests'];
+$place_id = $_POST["place_id"];//place id from  input
 
-//information chekkk as usall
-if ($place_id == "" || $checkin == "" || $checkout == "") {
-    echo "<p style='color:red'>Missing booking information.</p>";
-    echo "<p><a href='index.php'>Back to Home</a></p>";
-    include "templates/footer.php";
-    exit;
-}
+$checkin  = $_POST["checkin"];//checkin date from input
+$checkout = $_POST["checkout"];//checkcout date from input
+$rooms    = $_POST["rooms"];//rooms from input
+$guests   = $_POST["guests"];//guests from input
+
+
 
 //  query to get place and owner info
 $sql = "SELECT p.*, u.first_name AS owner_first, u.last_name AS owner_last, u.email AS owner_email
@@ -43,20 +43,17 @@ if (!$place) {
 $start = date_create($checkin);
 $end = date_create($checkout);
 
-$nights = 0;
+$diff=date_diff($start,$end);
 
-if ($start && $end) 
+$nights=$diff->format("%a");
 
-{
-    $difference = date_diff($start, $end);
-    $nights = $difference->format('%a'); // total days count
-}
+
 
 // output booking summary
-echo "<h2>" . $place['name'] . "</h2>";
-echo "<p>" . $place['description'] . "</p>";
-echo "<p>Owner: <a href='user.php?id=" . $place['user_id'] . "'>" . $place['owner_first'] . " " . $place['owner_last'] . "</a></p>";
-echo "<p>Price per Night: " . $place['price_by_night'] . "</p>";
+echo "<h2>" . $place["name"] . "</h2>";
+echo "<p>" . $place["description"] . "</p>";
+echo "<p>Owner: <a href='user.php?id=" . $place["user_id"] . "'>" . $place["owner_first"] . " " . $place["owner_last"] . "</a></p>";
+echo "<p>Price per Night: " . $place["price_by_night"] . "</p>";
 echo "<p>Check-in: " . $checkin . "</p>";
 echo "<p>Check-out: " . $checkout . "</p>";
 echo "<p>Number of nights: " . $nights . "</p>";
@@ -65,6 +62,7 @@ echo "<p>Guests: " . $guests . "</p>";
 
 //shwing ckn,ckout,rooms,guests in confirm and back to home button
 echo "<form method='post' action='confirm.php' style='display:inline;'>";
+
 echo "<input type='hidden' name='place_id' value='" . $place_id . "'>";
 echo "<input type='hidden' name='checkin' value='" . $checkin . "'>";
 echo "<input type='hidden' name='checkout' value='" . $checkout . "'>";
