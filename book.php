@@ -32,7 +32,7 @@ $st = $pdo->prepare($sql);
 $st->execute(array('id' => $place_id));
 $place = $st->fetch();
 
-// if not found
+// if places  not found in system:
 if (!$place) {
     echo "<p>Place not found. <a href='index.php'>Back to Home</a></p>";
     include "templates/footer.php";

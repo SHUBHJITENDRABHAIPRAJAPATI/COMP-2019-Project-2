@@ -20,6 +20,7 @@ if ($checkin == "" || $checkout == "") {
     $errors[] = "Dates not provided.";
 }
 
+//checking in and checkout dates validation
 $d1 = date_create($checkin);
 $d2 = date_create($checkout);
 $today = date_create(date("Y-m-d"));
